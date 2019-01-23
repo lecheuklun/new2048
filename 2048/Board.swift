@@ -24,16 +24,16 @@ class Board: NSObject {
         squares = [Square]()
         
         for _ in 0 ..< 16 {
-            squares.append(Square(value: .none))
+            squares.append(Square(value: .empty))
         }
     }
     
     func updateSquare(withNumber number: ValidNumber, inColumn column: Int, row: Int) {
         /*
-         1  2  3  4
+         1  2  3  4         row 0
          5  6  7  8
          9  10 11 12
-         13 14 15 16
+         13 14 15 16        row 3
          */
         
         let index = 4 * (row - 1) + column

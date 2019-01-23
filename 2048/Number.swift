@@ -14,7 +14,8 @@ enum SwipeDirection {
 }
 
 enum ValidNumber: Int {
-    case two = 0
+    case empty = 0
+    case two
     case four
     case eight
     case sixteen
@@ -25,7 +26,6 @@ enum ValidNumber: Int {
     case fiveTwelve
     case tenTwentyFour
     case twentyFortyEight
-    case none // rawValue = 12
 }
 
 class Square: NSObject {
