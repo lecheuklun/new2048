@@ -10,10 +10,10 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet var columnViews: [UIView]!
-    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var bigView: UIView!
+    @IBOutlet weak var stackView: UIStackView!
     
+    @IBOutlet var columnViews: [UIView]!
     
     var squareViews = [[UIView]]()
     var board: Board!
@@ -27,33 +27,33 @@ class ViewController: UIViewController {
     func resetBoard() {
         board = Board()
         squareViews = [[UIView]]()
-        updateUI()
+        loadUI()
     }
     
-    func updateUI() {
+    func loadUI() {
         view.backgroundColor = UIColor(red: 0.97, green: 0.98, blue: 0.94, alpha: 1)
         
-        bigView.layer.borderColor = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1).cgColor
+        let gridColour = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1)
+        bigView.layer.borderColor = gridColour.cgColor
         bigView.layer.borderWidth = 20
         bigView.layer.cornerRadius = 10
-        bigView.backgroundColor = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1)
+        bigView.backgroundColor = gridColour
         
         for col in 0 ..< 4 {
             for row in 0 ..< 4 {
                 let frame = columnViews[col].frame
                 let size = min(frame.width, frame.height / 4)
-                
                 let square = UIView()
                 square.frame = CGRect(x: 0, y: 0, width: size, height: size)
                 square.layer.borderWidth = 10
                 square.layer.cornerRadius = 10
-                square.layer.borderColor = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1).cgColor
+                square.layer.borderColor = gridColour.cgColor
                 square.backgroundColor = UIColor(red:0.80, green:0.75, blue:0.71, alpha:1.0)
                 square.center = positionForSquare(col: col, row: row)
                 stackView.addSubview(square)
+                squareViews[col].append(square)
             }
         }
-
     }
     
     func positionForSquare(col: Int, row: Int) -> CGPoint {
