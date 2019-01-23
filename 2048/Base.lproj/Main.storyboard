@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+    <device id="ipad9_7" orientation="landscape">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -9,16 +13,71 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="_048" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EDL-QN-Bic">
+                                <rect key="frame" x="212" y="94" width="600" height="600"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HgJ-0E-Z16">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ten-1s-vXn">
+                                                <rect key="frame" x="0.0" y="0.0" width="150" height="600"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view tag="1" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uHW-Vc-5fe">
+                                                <rect key="frame" x="150" y="0.0" width="150" height="600"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view tag="2" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mtu-Vo-hnp">
+                                                <rect key="frame" x="300" y="0.0" width="150" height="600"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                            <view tag="3" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ovJ-Nh-bfG">
+                                                <rect key="frame" x="450" y="0.0" width="150" height="600"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="600" id="bh3-mq-TNu"/>
+                                            <constraint firstAttribute="width" constant="600" id="f96-fs-vBn"/>
+                                        </constraints>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="HgJ-0E-Z16" secondAttribute="trailing" id="Omg-vb-IVM"/>
+                                    <constraint firstAttribute="bottom" secondItem="HgJ-0E-Z16" secondAttribute="bottom" id="qd4-ES-yqq"/>
+                                    <constraint firstItem="HgJ-0E-Z16" firstAttribute="leading" secondItem="EDL-QN-Bic" secondAttribute="leading" id="x8b-M4-xgy"/>
+                                    <constraint firstItem="HgJ-0E-Z16" firstAttribute="top" secondItem="EDL-QN-Bic" secondAttribute="top" id="y6T-xP-feo"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="0.79984508769999996" blue="0.5851433426" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="EDL-QN-Bic" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="212" id="IDc-rf-TDX"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="EDL-QN-Bic" secondAttribute="bottom" constant="74" id="Kp4-JZ-MwO"/>
+                            <constraint firstItem="EDL-QN-Bic" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="74" id="M2c-At-mZk"/>
+                            <constraint firstItem="EDL-QN-Bic" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="tfn-pP-Bjq"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
+                    <connections>
+                        <outlet property="bigView" destination="EDL-QN-Bic" id="ois-eT-62l"/>
+                        <outlet property="stackView" destination="HgJ-0E-Z16" id="Fmt-TB-WWx"/>
+                        <outletCollection property="columnViews" destination="mtu-Vo-hnp" collectionClass="NSMutableArray" id="y5F-CS-fjK"/>
+                        <outletCollection property="columnViews" destination="ten-1s-vXn" collectionClass="NSMutableArray" id="lm8-m6-hnG"/>
+                        <outletCollection property="columnViews" destination="ovJ-Nh-bfG" collectionClass="NSMutableArray" id="C2W-l4-D5R"/>
+                        <outletCollection property="columnViews" destination="uHW-Vc-5fe" collectionClass="NSMutableArray" id="deh-8c-EJd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="137.6953125" y="133.59375"/>
         </scene>
     </scenes>
 </document>
