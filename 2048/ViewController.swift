@@ -20,6 +20,16 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         resetBoard()
+        enableSwiping()
+        
+        // test
+        updateBoard()
+        
+        /*
+        loadImage(ofNumber: .eight, col: 2, row: 2)
+        board.squares[board.indexOfSquare(col: 2, row: 2)!] = .eight
+        board.checkAdjacentSquares(inDirection: .down, col: 2, row: 0)
+ */
     }
     
     func resetBoard() {
@@ -56,7 +66,6 @@ class ViewController: UIViewController {
                 
                 columnView.addSubview(square)
                 squares[col].append(square)
-
             }
         }
     }
@@ -67,12 +76,11 @@ class ViewController: UIViewController {
         
         let yCoord = size / 2 + size * CGFloat(row)
         let position = CGPoint(x: 75, y: yCoord)
-        print("\(col), \(row), \(position)")
         return position
     }
 
     
-    func loadImage(ofNumber number: ValidNumber, col: Int, row: Int) {
+    func loadImage(ofNumber number: Number, col: Int, row: Int) {
         let column = squares[col]
         let square = column[row]
         
@@ -85,14 +93,43 @@ class ViewController: UIViewController {
             imageView.clipsToBounds = true
             square.addSubview(imageView)
         }
-        
-        
     }
     
- 
+    func enableSwiping() {
+        let right = UISwipeGestureRecognizer(target: self, action: #selector(squareSwiped(sender:)))
+        let left = UISwipeGestureRecognizer(target: self, action: #selector(squareSwiped(sender:)))
+        left.direction = .left
+        let up = UISwipeGestureRecognizer(target: self, action: #selector(squareSwiped(sender:)))
+        up.direction = .up
+        let down =  UISwipeGestureRecognizer(target: self, action: #selector(squareSwiped(sender:)))
+        down.direction = .down
+        
+        bigView.addGestureRecognizer(right)
+        bigView.addGestureRecognizer(left)
+        bigView.addGestureRecognizer(up)
+        bigView.addGestureRecognizer(down)
+    }
     
+    @objc func squareSwiped(sender: UISwipeGestureRecognizer) {
+        switch sender.direction {
+        case .up: print("Swipe up detected")
+        case .down: print("swipe down detected")
+        case .left: print("swipe down detected")
+        case .right: print("Swipe right detected")
+        default: break
+        }
+    }
     
-
+    func updateBoard() {
+        for col in 0...3 {
+            for row in 0...3 {
+                let index = board.indexOfSquare(col: col, row: row)!
+                let number = board.squares[index]
+                loadImage(ofNumber: number, col: col, row: row)
+            }
+        }
+        
+    }
 
 }
 
