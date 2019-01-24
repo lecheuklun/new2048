@@ -21,6 +21,8 @@ enum Number: Int {
     case fiveTwelve
     case tenTwentyFour
     case twentyFortyEight
+    case fortyNinetySix
+    case eightyOneNinetyTwo
 }
 
 enum Direction {
@@ -33,19 +35,26 @@ class Board: NSObject {
     
     var squares = [Number]()
     
+    var newSquares = [Int]()
+    
+    var testing = false
+    
     override init() {
         super.init()
         
         resetBoard()
         
-        /*
-        updateSquare(withNumber: .two, inColumn: 0, row: 0)
-        updateSquare(withNumber: .four, inColumn: 0, row: 3)
-        updateSquare(withNumber: .four, inColumn: 3, row: 3)
-        moveSquare(inDirection: .up, col: 0, row: 3)
- */
- 
-        //proceedGame()
+        if !testing {
+            generateSquares(howMany: 3)
+        }
+        
+        if testing {
+            updateSquare(withNumber: .two, inColumn: 1, row: 0)
+            updateSquare(withNumber: .two, inColumn: 2, row: 0)
+            updateSquare(withNumber: .four, inColumn: 3, row: 0)
+            
+        }
+        
     }
     
     func indexOfSquare(col: Int, row: Int) -> Int? {
@@ -104,16 +113,49 @@ class Board: NSObject {
         return results
     }
     
-    func proceedGame() { //player swipes, this is called
-        let emptySquares = squares.filter { $0 == .empty }.count
-        switch emptySquares {
-        case 0: break //no squares generated
-        case 1 ..< 3: generateSquares(howMany: 1)
-        case 3 ..< 4: generateSquares(howMany: 2)
-        default: generateSquares(howMany: 3)
+    func proceedGame(swipedDirection: Direction) { //player swipes, this is called
+        newSquares.removeAll()
+        
+        if !testing {
+            let emptySquares = squares.filter { $0 == .empty }.count
+            switch emptySquares {
+            case 0: break //no squares generated
+            case 1 ..< 3: generateSquares(howMany: 1)
+            case 3 ..< 4: generateSquares(howMany: 2)
+            default: generateSquares(howMany: 3)
+            }
+        }
+
+        let order = (0...3)
+        
+        switch swipedDirection {
+        case .up:
+            for row in order {
+                for col in order {
+                    moveSquare(inDirection: .up, col: col, row: row)
+                }
+            }
+        case .down:
+            for row in order.reversed() {
+                for col in order {
+                    moveSquare(inDirection: .down, col: col, row: row)
+                }
+            }
+        case .left:
+            for col in order {
+                for row in order {
+                    moveSquare(inDirection: .left, col: col, row: row)
+                }
+            }
+        case .right:
+            for col in order.reversed() {
+                for row in order {
+                    moveSquare(inDirection: .right, col: col, row: row)
+                }
+            }
         }
         
-        // move / merge
+        // handle animations
         
         if isWin() {
             // show win ac
@@ -135,12 +177,14 @@ class Board: NSObject {
         for occurence in 0 ..< howMany {
             let index = indexArray[occurence]
             switch Int.random(in: 0...2) {
-            case 0, 1: squares[index] = .two
-            case 2: squares[index] = .four
+            case 0, 1:
+                squares[index] = .two
+            case 2:
+                squares[index] = .four
             default: break
             }
+            newSquares.append(index)
         }
-        print(squares)
     }
     
 
@@ -158,31 +202,40 @@ class Board: NSObject {
         let movingSquareIndex = indexOfSquare(col: col, row: row)!
         let movingSquare = squares[movingSquareIndex]
         
-        var offset = 0
+        var squaresToMove = 0
         
         for square in squaresAhead {
             if square != .empty && square == movingSquare { // then can merge
-                // merge moving square and square
-                print("merge!")
-                return
+                
+                let targetSquareIndex = indexOfSquareInDirection(direction, col: col, row: row, byOffset: squaresToMove + 1)!
+                
+                if !newSquares.contains(targetSquareIndex) {
+                    merge(movingSquareIndex, withSquare: targetSquareIndex)
+                    return
+                } else {
+                    break
+                }
             } else if square != .empty { // then something in way
-                continue
+                break
             } else { //then this square is empty
-                offset += 1
+                squaresToMove += 1
             }
         }
         
-        let destinationIndex = indexOfSquareInDirection(direction, col: col, row: row, byOffset: offset)!
+        let destinationIndex = indexOfSquareInDirection(direction, col: col, row: row, byOffset: squaresToMove)!
         squares[movingSquareIndex] = .empty
         squares[destinationIndex] = movingSquare
-        print(squares)
     }
     
     func merge(_ movingSquareIndex: Int, withSquare squareIndex: Int) {
-        
+        if squares[movingSquareIndex] == squares[squareIndex] {
+            squares[movingSquareIndex] = .empty
+            let doubled = squares[squareIndex].rawValue + 1
+            squares[squareIndex] = Number.init(rawValue: doubled)!
+            newSquares.append(squareIndex)
+        }
     }
     
-    // problems: if 2248, make it impossible to merge all
     
     
 }

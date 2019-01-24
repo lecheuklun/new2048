@@ -21,15 +21,8 @@ class ViewController: UIViewController {
         
         resetBoard()
         enableSwiping()
-        
-        // test
         updateBoard()
         
-        /*
-        loadImage(ofNumber: .eight, col: 2, row: 2)
-        board.squares[board.indexOfSquare(col: 2, row: 2)!] = .eight
-        board.checkAdjacentSquares(inDirection: .down, col: 2, row: 0)
- */
     }
     
     func resetBoard() {
@@ -83,8 +76,9 @@ class ViewController: UIViewController {
     func loadImage(ofNumber number: Number, col: Int, row: Int) {
         let column = squares[col]
         let square = column[row]
+        square.subviews.forEach { $0.removeFromSuperview() }
         
-        if number.rawValue != 0 {
+        if number != .empty {
             let processedNumber = pow(2, number.rawValue)
             
             let imageView = UIImageView(image: UIImage(named: "\(String(describing: processedNumber)).png"))
@@ -111,13 +105,21 @@ class ViewController: UIViewController {
     }
     
     @objc func squareSwiped(sender: UISwipeGestureRecognizer) {
-        switch sender.direction {
-        case .up: print("Swipe up detected")
-        case .down: print("swipe down detected")
-        case .left: print("swipe down detected")
-        case .right: print("Swipe right detected")
+        let direction = sender.direction
+        
+        switch direction {
+        case .up:
+            board.proceedGame(swipedDirection: Direction.up)
+        case .down:
+            board.proceedGame(swipedDirection: Direction.down)
+        case .left:
+            board.proceedGame(swipedDirection: Direction.left)
+        case .right:
+            board.proceedGame(swipedDirection: Direction.right)
         default: break
         }
+        
+        updateBoard()
     }
     
     func updateBoard() {
