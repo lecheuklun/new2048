@@ -37,7 +37,15 @@ class Board: NSObject {
         super.init()
         
         resetBoard()
-        proceedGame()
+        
+        /*
+        updateSquare(withNumber: .two, inColumn: 0, row: 0)
+        updateSquare(withNumber: .four, inColumn: 0, row: 3)
+        updateSquare(withNumber: .four, inColumn: 3, row: 3)
+        moveSquare(inDirection: .up, col: 0, row: 3)
+ */
+ 
+        //proceedGame()
     }
     
     func indexOfSquare(col: Int, row: Int) -> Int? {
@@ -72,38 +80,31 @@ class Board: NSObject {
         return squares[indexOfSquare(col: column, row: row)!]
     }
     
-    func checkAdjacentSquares(inDirection direction: Direction, col: Int, row: Int) -> [Number] {
-        var results = [Number]()
+    func indexOfSquareInDirection(_ direction: Direction, col: Int, row: Int, byOffset offset: Int) -> Int? {
         switch direction {
         case .up:
-            for i in 1...3 {
-                if let index = indexOfSquare(col: col, row: row - i) {
-                    results.append(squares[index])
-                }
-            }
+            return indexOfSquare(col: col, row: row - offset)
         case .down:
-            for i in 1...3 {
-                if let index = indexOfSquare(col: col, row: row + i) {
-                    results.append(squares[index])
-                }
-            }
+            return indexOfSquare(col: col, row: row + offset)
         case .left:
-            for i in 1...3 {
-                if let index = indexOfSquare(col: col - i, row: row) {
-                    results.append(squares[index])
-                }
-            }
+            return indexOfSquare(col: col - offset, row: row)
         case .right:
-            for i in 1...3 {
-                if let index = indexOfSquare(col: col + i, row: row) {
-                    results.append(squares[index])
-                }
+            return indexOfSquare(col: col + offset, row: row)
+        }
+    }
+    
+    func checkAdjacentSquares(inDirection direction: Direction, col: Int, row: Int) -> [Number] {
+        var results = [Number]()
+        
+        for i in 1...3 {
+            if let index = indexOfSquareInDirection(direction, col: col, row: row, byOffset: i) {
+                results.append(squares[index])
             }
         }
         return results
     }
     
-    func proceedGame() { //player swipes, this is called, then merge
+    func proceedGame() { //player swipes, this is called
         let emptySquares = squares.filter { $0 == .empty }.count
         switch emptySquares {
         case 0: break //no squares generated
@@ -112,7 +113,7 @@ class Board: NSObject {
         default: generateSquares(howMany: 3)
         }
         
-        performMerging()
+        // move / merge
         
         if isWin() {
             // show win ac
@@ -142,9 +143,7 @@ class Board: NSObject {
         print(squares)
     }
     
-    func performMerging() {
-        
-    }
+
     
     func isGameOver() -> Bool {
         return false
@@ -154,6 +153,36 @@ class Board: NSObject {
         return false
     }
     
+    func moveSquare(inDirection direction: Direction, col: Int, row: Int) {
+        let squaresAhead = checkAdjacentSquares(inDirection: direction, col: col, row: row)
+        let movingSquareIndex = indexOfSquare(col: col, row: row)!
+        let movingSquare = squares[movingSquareIndex]
+        
+        var offset = 0
+        
+        for square in squaresAhead {
+            if square != .empty && square == movingSquare { // then can merge
+                // merge moving square and square
+                print("merge!")
+                return
+            } else if square != .empty { // then something in way
+                continue
+            } else { //then this square is empty
+                offset += 1
+            }
+        }
+        
+        let destinationIndex = indexOfSquareInDirection(direction, col: col, row: row, byOffset: offset)!
+        squares[movingSquareIndex] = .empty
+        squares[destinationIndex] = movingSquare
+        print(squares)
+    }
+    
+    func merge(_ movingSquareIndex: Int, withSquare squareIndex: Int) {
+        
+    }
+    
+    // problems: if 2248, make it impossible to merge all
     
     
 }
