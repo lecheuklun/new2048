@@ -38,7 +38,13 @@ class ViewController: UIViewController {
         bigView.layer.borderWidth = 20
         bigView.layer.cornerRadius = 10
         bigView.backgroundColor = gridColour
-
+        
+        for col in squares {
+            for row in col {
+                row.removeFromSuperview()
+            }
+        }
+    
         squares.removeAll()
         
         for col in 0...3 {
@@ -127,6 +133,23 @@ class ViewController: UIViewController {
     }
     
     func updateBoard() {
+        if board.canShowWinAlert {
+            let ac = UIAlertController(title: "You win!", message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Play again", style: .destructive) { [unowned self] _ in
+                self.resetBoard()
+                self.updateBoard()
+            })
+            ac.addAction(UIAlertAction(title: "Continue", style: .default))
+            present(ac, animated: true)
+        } else if board.gameOver {
+            let ac = UIAlertController(title: "Game over!", message: nil, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "Play again", style: .default) { [unowned self] _ in
+                self.resetBoard()
+                self.updateBoard()
+            })
+            present(ac, animated: true)
+        }
+        
         for col in 0...3 {
             for row in 0...3 {
                 let index = Position(col: col, row: row).index
@@ -138,7 +161,7 @@ class ViewController: UIViewController {
     
     func animate() {
         if board.currentSwipe != nil {  // exists
-            if let move = board.currentSwipe!.moves.first {
+            for move in board.currentSwipe!.moves {
                 let finishedPosition = move.after
                 
                 let finishedSquare = squareForPosition(col: finishedPosition.col, row: finishedPosition.row)

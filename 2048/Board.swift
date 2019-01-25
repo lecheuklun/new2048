@@ -25,12 +25,8 @@ enum Number: Int {
     case eightyOneNinetyTwo
 }
 
-enum Direction {
+enum Direction: CaseIterable {
     case up, down, left, right
-}
-
-enum AnimationType {
-    case move, merge
 }
 
 class Board: NSObject {
@@ -40,13 +36,19 @@ class Board: NSObject {
     var squares = [Number]()
     var newSquares = [Int]()
     
-    var testing = true
+    var testing = false
     
     var currentSwipe: Swipe?
     var moves = [Move]()
     
+    var canShowWinAlert: Bool = false
+    var gameOver: Bool = false
+    
     override init() {
         super.init()
+        
+        canShowWinAlert = false
+        gameOver = false
         
         currentSwipe = nil
         
@@ -57,8 +59,8 @@ class Board: NSObject {
         }
         
         if testing {
-            updateSquare(withNumber: .two, position: Position(col: 0, row: 0))
-            
+            updateSquare(withNumber: .tenTwentyFour, position: Position(col: 0, row: 0))
+            updateSquare(withNumber: .tenTwentyFour, position: Position(col: 3, row: 0))
         }
         
     }
@@ -85,17 +87,21 @@ class Board: NSObject {
         return squares[position.index]
     }
     
-    func positionOfSquareInDirection(_ direction: Direction, position: Position, byOffset offset: Int) -> Position {
+    func positionOfSquareInDirection(_ direction: Direction, position: Position, byOffset offset: Int) -> Position? {
         
-        switch direction {
-        case .up:
-            return Position(col: position.col, row: position.row - offset)
-        case .down:
-            return Position(col: position.col, row: position.row + offset)
-        case .left:
-            return Position(col: position.col - offset, row: position.row)
-        case .right:
-            return Position(col: position.col + offset, row: position.row)
+        if (0...15).contains(position.index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
+            switch direction {
+            case .up:
+                return Position(col: position.col, row: position.row - offset)
+            case .down:
+                return Position(col: position.col, row: position.row + offset)
+            case .left:
+                return Position(col: position.col - offset, row: position.row)
+            case .right:
+                return Position(col: position.col + offset, row: position.row)
+            }
+        } else {
+            return nil
         }
     }
     
@@ -103,11 +109,11 @@ class Board: NSObject {
         var results = [Number]()
         
         for i in 1...3 {
-            let position = positionOfSquareInDirection(direction, position: position, byOffset: i)
-            
-            let index = position.index
-            if (0...15).contains(index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
-                results.append(squares[index])
+            if let position = positionOfSquareInDirection(direction, position: position, byOffset: i) {
+                let index = position.index
+                if (0...15).contains(index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
+                    results.append(squares[index])
+                }
             }
         }
         return results
@@ -158,14 +164,12 @@ class Board: NSObject {
         
         currentSwipe = Swipe(direction: swipedDirection, moves: moves)
         
-        // handle animations
-        
-        
-        if isWin() {
-            // show win ac
-            
+        if isWin() && !canShowWinAlert {
+            canShowWinAlert = true
         } else if isGameOver() {
-            // show game over ac
+            gameOver = true
+        } else {
+            canShowWinAlert = false
         }
     }
     
@@ -194,11 +198,40 @@ class Board: NSObject {
 
     
     func isGameOver() -> Bool {
-        return false
+        let emptySquares = squares.filter { $0 == .empty }.count
+        guard emptySquares == 0 else { return false }
+        
+        for col in 0...3 {
+            for row in 0...3 {
+                
+                var adjacentSquares = [Number]()
+                
+                let position = Position(col: col, row: row)
+                let square = squares[position.index]
+                
+                for direction in Direction.allCases {
+                    if let adjacentSquare = checkAdjacentSquares(inDirection: direction, position: position).first {
+                        adjacentSquares.append(adjacentSquare)
+                    }
+                }
+                
+                for adjacentSquare in adjacentSquares {
+                    guard square != adjacentSquare else { return false }
+                }
+            }
+        }
+        print("gameOver")
+        return true
+        
     }
     
     func isWin() -> Bool {
-        return false
+        if squares.contains(.twentyFortyEight) {
+            print("win!")
+            return true
+        } else {
+            return false
+        }
     }
     
     func moveSquare(inDirection direction: Direction, position: Position) {
@@ -212,10 +245,10 @@ class Board: NSObject {
                 
                 let targetSquarePosition = positionOfSquareInDirection(direction, position: position, byOffset: squaresToMove + 1)
                 
-                if !newSquares.contains(targetSquarePosition.index) {
-                    merge(movingSquarePosition: position, withSquare: targetSquarePosition)
+                if !newSquares.contains(targetSquarePosition!.index) {
+                    merge(movingSquarePosition: position, withSquare: targetSquarePosition!)
                     
-                    let move = Move(before: position, after: targetSquarePosition, mergeOccured: true)
+                    let move = Move(before: position, after: targetSquarePosition!, mergeOccured: true)
                     moves.append(move)
                     
                     return
@@ -232,9 +265,9 @@ class Board: NSObject {
         if squaresToMove != 0 {
             let destinationPosition = positionOfSquareInDirection(direction, position: position, byOffset: squaresToMove)
             squares[position.index] = .empty
-            squares[destinationPosition.index] = movingSquare
+            squares[destinationPosition!.index] = movingSquare
             
-            let move = Move(before: position, after: destinationPosition, mergeOccured: false)
+            let move = Move(before: position, after: destinationPosition!, mergeOccured: false)
             moves.append(move)
         }
     }
@@ -247,7 +280,5 @@ class Board: NSObject {
             newSquares.append(targetPosition.index)
         }
     }
-    
-    
     
 }
