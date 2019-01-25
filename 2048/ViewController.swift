@@ -41,11 +41,11 @@ class ViewController: UIViewController {
 
         squares.removeAll()
         
-        for col in 0 ..< 4 {
+        for col in 0...3 {
             
             squares.append([UIView]())
 
-            for row in 0 ..< 4 {
+            for row in 0...3 {
                 let columnView = columnViews[col]
                 
                 let size = min(columnView.frame.width, columnView.frame.height / 4)
@@ -71,11 +71,14 @@ class ViewController: UIViewController {
         let position = CGPoint(x: 75, y: yCoord)
         return position
     }
-
     
-    func loadImage(ofNumber number: Number, col: Int, row: Int) {
+    func squareForPosition(col: Int, row: Int) -> UIView {
         let column = squares[col]
-        let square = column[row]
+        return column[row]
+    }
+
+    func loadImage(ofNumber number: Number, col: Int, row: Int) {
+        let square = squareForPosition(col: col, row: row)
         square.subviews.forEach { $0.removeFromSuperview() }
         
         if number != .empty {
@@ -119,19 +122,25 @@ class ViewController: UIViewController {
         default: break
         }
         
+        animate()
         updateBoard()
     }
     
     func updateBoard() {
         for col in 0...3 {
             for row in 0...3 {
-                let index = board.indexOfSquare(col: col, row: row)!
+                let index = Position(col: col, row: row).index
                 let number = board.squares[index]
                 loadImage(ofNumber: number, col: col, row: row)
             }
         }
+    }
+    
+    func animate() {
         
     }
+    
+ 
 
 }
 
