@@ -55,7 +55,7 @@ class ViewController: UIViewController {
                 square.layer.cornerRadius = 10
                 square.layer.borderColor = gridColour.cgColor
                 square.backgroundColor = UIColor(red:0.80, green:0.75, blue:0.71, alpha:1.0)
-                square.center = positionForSquare(col: col, row: row)
+                square.center = coordForSquare(col: col, row: row)
                 
                 columnView.addSubview(square)
                 squares[col].append(square)
@@ -63,13 +63,13 @@ class ViewController: UIViewController {
         }
     }
     
-    func positionForSquare(col: Int, row: Int) -> CGPoint {
+    func coordForSquare(col: Int, row: Int) -> CGPoint {
         let column = columnViews[col]
         let size = min(column.frame.width, column.frame.height / 4)
         
         let yCoord = size / 2 + size * CGFloat(row)
-        let position = CGPoint(x: 75, y: yCoord)
-        return position
+        let cgPosition = CGPoint(x: 75, y: yCoord)
+        return cgPosition
     }
     
     func squareForPosition(col: Int, row: Int) -> UIView {
@@ -137,7 +137,23 @@ class ViewController: UIViewController {
     }
     
     func animate() {
-        
+        if board.currentSwipe != nil {  // exists
+            if let move = board.currentSwipe!.moves.first {
+                let finishedPosition = move.after
+                
+                let finishedSquare = squareForPosition(col: finishedPosition.col, row: finishedPosition.row)
+                
+                let xAmount: CGFloat = (CGFloat(move.before.col) - CGFloat(move.after.col)) * 150
+                let yAmount: CGFloat = (CGFloat(move.before.row) - CGFloat(move.after.row)) * 150
+                
+                finishedSquare.transform = CGAffineTransform(translationX: xAmount, y: yAmount)
+                
+                UIView.animate(withDuration: 0.2, animations: {
+                    finishedSquare.transform = CGAffineTransform.identity
+                }) 
+            }
+            
+        }
     }
     
  

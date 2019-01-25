@@ -29,6 +29,8 @@
 		41D96E8B21F8B32400E6A735 /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D96E7E21F8B32400E6A735 /* 2.png */; };
 		41D96E8C21F8B32400E6A735 /* 8192.png in Resources */ = {isa = PBXBuildFile; fileRef = 41D96E7F21F8B32400E6A735 /* 8192.png */; };
 		41D96E8E21FB1FA000E6A735 /* Position.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D96E8D21FB1FA000E6A735 /* Position.swift */; };
+		41D96E9021FB2CE000E6A735 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D96E8F21FB2CE000E6A735 /* Swipe.swift */; };
+		41D96E9221FB2D2D00E6A735 /* Move.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41D96E9121FB2D2D00E6A735 /* Move.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,8 @@
 		41D96E7E21F8B32400E6A735 /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
 		41D96E7F21F8B32400E6A735 /* 8192.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8192.png; sourceTree = "<group>"; };
 		41D96E8D21FB1FA000E6A735 /* Position.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position.swift; sourceTree = "<group>"; };
+		41D96E8F21FB2CE000E6A735 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
+		41D96E9121FB2D2D00E6A735 /* Move.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Move.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 			children = (
 				4148DC7121F7951B00B3376C /* AppDelegate.swift */,
 				4148DC7321F7951B00B3376C /* ViewController.swift */,
+				41D96E8F21FB2CE000E6A735 /* Swipe.swift */,
+				41D96E9121FB2D2D00E6A735 /* Move.swift */,
 				410B9D6D21F8792000F4AF6A /* Board.swift */,
 				41D96E8D21FB1FA000E6A735 /* Position.swift */,
 				4148DC7521F7951B00B3376C /* Main.storyboard */,
@@ -324,7 +330,9 @@
 			files = (
 				4148DC7421F7951B00B3376C /* ViewController.swift in Sources */,
 				4148DC7221F7951B00B3376C /* AppDelegate.swift in Sources */,
+				41D96E9021FB2CE000E6A735 /* Swipe.swift in Sources */,
 				41D96E8E21FB1FA000E6A735 /* Position.swift in Sources */,
+				41D96E9221FB2D2D00E6A735 /* Move.swift in Sources */,
 				410B9D6E21F8792000F4AF6A /* Board.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

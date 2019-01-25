@@ -38,14 +38,17 @@ class Board: NSObject {
     static var height = 4
     
     var squares = [Number]()
+    var newSquares = [Int]()
     
     var testing = true
     
-    var newSquares = [Int]()
-    var animations = [(type: AnimationType, from: Int, to: Int)]()
+    var currentSwipe: Swipe?
+    var moves = [Move]()
     
     override init() {
         super.init()
+        
+        currentSwipe = nil
         
         resetBoard()
         
@@ -112,6 +115,7 @@ class Board: NSObject {
     
     func proceedGame(swipedDirection: Direction) { //player swipes, this is called
         newSquares.removeAll()
+        moves.removeAll()
         
         if !testing {
             let emptySquares = squares.filter { $0 == .empty }.count
@@ -151,6 +155,8 @@ class Board: NSObject {
                 }
             }
         }
+        
+        currentSwipe = Swipe(direction: swipedDirection, moves: moves)
         
         // handle animations
         
@@ -208,20 +214,29 @@ class Board: NSObject {
                 
                 if !newSquares.contains(targetSquarePosition.index) {
                     merge(movingSquarePosition: position, withSquare: targetSquarePosition)
+                    
+                    let move = Move(before: position, after: targetSquarePosition, mergeOccured: true)
+                    moves.append(move)
+                    
                     return
                 } else {
                     break
                 }
             } else if square != .empty { // then something in way
                 break
-            } else { //then this square is empty
+            } else if movingSquare != .empty { //then this square is empty
                 squaresToMove += 1
             }
         }
         
-        let destinationPosition = positionOfSquareInDirection(direction, position: position, byOffset: squaresToMove)
-        squares[position.index] = .empty
-        squares[destinationPosition.index] = movingSquare
+        if squaresToMove != 0 {
+            let destinationPosition = positionOfSquareInDirection(direction, position: position, byOffset: squaresToMove)
+            squares[position.index] = .empty
+            squares[destinationPosition.index] = movingSquare
+            
+            let move = Move(before: position, after: destinationPosition, mergeOccured: false)
+            moves.append(move)
+        }
     }
     
     func merge(movingSquarePosition position: Position, withSquare targetPosition: Position) {
