@@ -146,6 +146,14 @@ class ViewController: UIViewController {
                 let xAmount: CGFloat = (CGFloat(move.before.col) - CGFloat(move.after.col)) * 150
                 let yAmount: CGFloat = (CGFloat(move.before.row) - CGFloat(move.after.row)) * 150
                 
+                let column = columnViews[finishedPosition.col]
+                if yAmount != 0 {
+                    column.bringSubviewToFront(finishedSquare)
+                } else if xAmount != 0 {
+                    let stackView = column.superview
+                    stackView!.bringSubviewToFront(column)
+                }
+                
                 finishedSquare.transform = CGAffineTransform(translationX: xAmount, y: yAmount)
                 
                 UIView.animate(withDuration: 0.2, animations: {
