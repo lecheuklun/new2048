@@ -36,7 +36,7 @@ class Board: NSObject {
     var squares = [Number]()
     var newSquares = [Int]()
     
-    var testing = false
+    var testing = true
     
     var currentSwipe: Swipe?
     var moves = [Move]()
@@ -59,8 +59,8 @@ class Board: NSObject {
         }
         
         if testing {
-            updateSquare(withNumber: .tenTwentyFour, position: Position(col: 0, row: 0))
-            updateSquare(withNumber: .tenTwentyFour, position: Position(col: 3, row: 0))
+            updateSquare(withNumber: .two, position: Position(col: 0, row: 0))
+            updateSquare(withNumber: .two, position: Position(col: 3, row: 0))
         }
         
     }
