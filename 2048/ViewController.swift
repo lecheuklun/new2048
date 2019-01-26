@@ -16,6 +16,8 @@ class ViewController: UIViewController {
     var squares = [[UIView]]()
     var board: Board!
     
+    let gridColour = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,7 +34,6 @@ class ViewController: UIViewController {
     
     func loadUI() {
         view.backgroundColor = UIColor(red: 0.97, green: 0.98, blue: 0.94, alpha: 1)
-        let gridColour = UIColor(red: 0.73, green: 0.68, blue: 0.63, alpha: 1)
         
         bigView.layer.borderColor = gridColour.cgColor
         bigView.layer.borderWidth = 20
@@ -54,19 +55,23 @@ class ViewController: UIViewController {
             for row in 0...3 {
                 let columnView = columnViews[col]
                 
-                let size = min(columnView.frame.width, columnView.frame.height / 4)
-                let square = UIView()
-                square.frame = CGRect(x: 0, y: 0, width: size, height: size)
-                square.layer.borderWidth = 10
-                square.layer.cornerRadius = 10
-                square.layer.borderColor = gridColour.cgColor
-                square.backgroundColor = UIColor(red:0.80, green:0.75, blue:0.71, alpha:1.0)
-                square.center = coordForSquare(col: col, row: row)
+                let square = createSquare(atCol: col, row: row)
                 
                 columnView.addSubview(square)
                 squares[col].append(square)
             }
         }
+    }
+    
+    func createSquare(atCol col: Int, row: Int) -> UIView {
+        let square = UIView()
+        square.frame = CGRect(x: 0, y: 0, width: 150, height: 150)
+        square.layer.borderWidth = 10
+        square.layer.cornerRadius = 10
+        square.layer.borderColor = gridColour.cgColor
+        square.backgroundColor = UIColor(red:0.80, green:0.75, blue:0.71, alpha:1.0)
+        square.center = coordForSquare(col: col, row: row)
+        return square
     }
     
     func coordForSquare(col: Int, row: Int) -> CGPoint {
