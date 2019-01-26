@@ -89,19 +89,43 @@ class Board: NSObject {
     
     func positionOfSquareInDirection(_ direction: Direction, position: Position, byOffset offset: Int) -> Position? {
         
-        if (0...15).contains(position.index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
-            switch direction {
-            case .up:
-                return Position(col: position.col, row: position.row - offset)
-            case .down:
-                return Position(col: position.col, row: position.row + offset)
-            case .left:
-                return Position(col: position.col - offset, row: position.row)
-            case .right:
-                return Position(col: position.col + offset, row: position.row)
+        func checkValidity(ofPosition position: Position) -> Bool {
+            if (0...15).contains(position.index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
+                return true
+            } else {
+                return false
             }
-        } else {
-            return nil
+        }
+        
+        switch direction {
+        case .up:
+            let newPosition = Position(col: position.col, row: position.row - offset)
+            if checkValidity(ofPosition: newPosition) {
+                return newPosition
+            } else {
+                return nil
+            }
+        case .down:
+            let newPosition = Position(col: position.col, row: position.row + offset)
+            if checkValidity(ofPosition: newPosition) {
+                return newPosition
+            } else {
+                return nil
+            }
+        case .left:
+            let newPosition = Position(col: position.col - offset, row: position.row)
+            if checkValidity(ofPosition: newPosition) {
+                return newPosition
+            } else {
+                return nil
+            }
+        case .right:
+            let newPosition = Position(col: position.col + offset, row: position.row)
+            if checkValidity(ofPosition: newPosition) {
+                return newPosition
+            } else {
+                return nil
+            }
         }
     }
     
@@ -110,10 +134,7 @@ class Board: NSObject {
         
         for i in 1...3 {
             if let position = positionOfSquareInDirection(direction, position: position, byOffset: i) {
-                let index = position.index
-                if (0...15).contains(index) && (0...3).contains(position.col) && (0...3).contains(position.row) {
-                    results.append(squares[index])
-                }
+                results.append(squares[position.index])
             }
         }
         return results
