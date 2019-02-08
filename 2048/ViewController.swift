@@ -92,15 +92,20 @@ class ViewController: UIViewController {
         let square = squareForPosition(col: col, row: row)
         square.subviews.forEach { $0.removeFromSuperview() }
         
-        if number != .empty {
-            let processedNumber = pow(2, number.rawValue)
-            
-            let imageView = UIImageView(image: UIImage(named: "\(String(describing: processedNumber)).png"))
-            imageView.frame = CGRect(origin: .zero, size: square.frame.size)
-            imageView.layer.cornerRadius = 10
-            imageView.clipsToBounds = true
-            square.addSubview(imageView)
-        }
+        guard number != .empty else { return }
+        
+        let imageView = createImage(number: number)
+        square.addSubview(imageView)
+    }
+    
+    func createImage(number: Number) -> UIImageView {
+        let processedNumber = pow(2, number.rawValue)
+        
+        let imageView = UIImageView(image: UIImage(named: "\(String(describing: processedNumber)).png"))
+        imageView.frame = CGRect(origin: .zero, size: CGSize(width: 150, height: 150))
+        imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
+        return imageView
     }
     
     func enableSwiping() {
@@ -167,26 +172,48 @@ class ViewController: UIViewController {
     func animate() {
         if board.currentSwipe != nil {  // exists
             for move in board.currentSwipe!.moves {
-                let finishedPosition = move.after
                 
-                let finishedSquare = squareForPosition(col: finishedPosition.col, row: finishedPosition.row)
-                
-                let xAmount: CGFloat = (CGFloat(move.before.col) - CGFloat(move.after.col)) * 150
-                let yAmount: CGFloat = (CGFloat(move.before.row) - CGFloat(move.after.row)) * 150
-                
-                let column = columnViews[finishedPosition.col]
-                if yAmount != 0 {
-                    column.bringSubviewToFront(finishedSquare)
-                } else if xAmount != 0 {
-                    let stackView = column.superview
-                    stackView!.bringSubviewToFront(column)
+                if !move.mergeOccured {
+                    
+                    let initialPosition = move.after
+                    
+                    let finishedSquare = squareForPosition(col: initialPosition.col, row: initialPosition.row)
+                    
+                    let xAmount: CGFloat = (CGFloat(move.before.col) - CGFloat(move.after.col)) * 150
+                    let yAmount: CGFloat = (CGFloat(move.before.row) - CGFloat(move.after.row)) * 150
+                    
+                    let column = columnViews[initialPosition.col]
+                    if yAmount != 0 {
+                        column.bringSubviewToFront(finishedSquare)
+                    } else if xAmount != 0 {
+                        let stackView = column.superview
+                        stackView!.bringSubviewToFront(column)
+                    }
+                    
+                    finishedSquare.transform = CGAffineTransform(translationX: xAmount, y: yAmount)
+                    
+                    UIView.animate(withDuration: 0.2, animations: {
+                        finishedSquare.transform = CGAffineTransform.identity
+                    })
+                } else {
+                    let position = move.after
+                    let initialSquare = createSquare(atCol: position.col, row: position.row)
+                    columnViews[position.col].addSubview(initialSquare)
+                    columnViews[position.col].bringSubviewToFront(initialSquare)
+                    
+                    let image = createImage(number: Number(rawValue: (board.squares[position.index].rawValue) - 1)!)
+                    initialSquare.addSubview(image)
+                    
+                    let xAmount: CGFloat = (CGFloat(move.before.col) - CGFloat(move.after.col)) * 150
+                    let yAmount: CGFloat = (CGFloat(move.before.row) - CGFloat(move.after.row)) * 150
+                    
+                    initialSquare.transform = CGAffineTransform(translationX: xAmount, y: yAmount)
+                    UIView.animate(withDuration: 0.2) {
+                        initialSquare.transform = .identity
+                        print("code ran")
+                    }
+                    initialSquare.removeFromSuperview()
                 }
-                
-                finishedSquare.transform = CGAffineTransform(translationX: xAmount, y: yAmount)
-                
-                UIView.animate(withDuration: 0.2, animations: {
-                    finishedSquare.transform = CGAffineTransform.identity
-                }) 
             }
             
         }
